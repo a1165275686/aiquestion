@@ -2,8 +2,6 @@ package com.lure.aiAnswer.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lure.aiAnswer.model.dto.post.PostAddRequest;
-import com.lure.aiAnswer.model.vo.PostVO;
 import com.lure.aiAnswer.annotation.AuthCheck;
 import com.lure.aiAnswer.common.BaseResponse;
 import com.lure.aiAnswer.common.DeleteRequest;
@@ -12,23 +10,22 @@ import com.lure.aiAnswer.common.ResultUtils;
 import com.lure.aiAnswer.constant.UserConstant;
 import com.lure.aiAnswer.exception.BusinessException;
 import com.lure.aiAnswer.exception.ThrowUtils;
+import com.lure.aiAnswer.model.dto.post.PostAddRequest;
 import com.lure.aiAnswer.model.dto.post.PostEditRequest;
 import com.lure.aiAnswer.model.dto.post.PostQueryRequest;
 import com.lure.aiAnswer.model.dto.post.PostUpdateRequest;
 import com.lure.aiAnswer.model.entity.Post;
 import com.lure.aiAnswer.model.entity.User;
+import com.lure.aiAnswer.model.vo.PostVO;
 import com.lure.aiAnswer.service.PostService;
 import com.lure.aiAnswer.service.UserService;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 帖子接口

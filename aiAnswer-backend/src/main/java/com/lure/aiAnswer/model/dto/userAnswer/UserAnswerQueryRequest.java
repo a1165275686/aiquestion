@@ -1,11 +1,10 @@
-package com.lure.aiAnswer.model.dto.useranswer;
+package com.lure.aiAnswer.model.dto.userAnswer;
 
 import com.lure.aiAnswer.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 查询用户答案请求

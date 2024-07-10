@@ -53,28 +53,17 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     public void validApp(App app, boolean add) {
         ThrowUtils.throwIf(app == null, ErrorCode.PARAMS_ERROR);
         // 从对象中取值
-        Long id = app.getId();
         String appName = app.getAppName();
         String appDesc = app.getAppDesc();
-        String appIcon = app.getAppIcon();
         Integer appType = app.getAppType();
         Integer scoringStrategy = app.getScoringStrategy();
         Integer reviewStatus = app.getReviewStatus();
-        String reviewMessage = app.getReviewMessage();
-        Long reviewerId = app.getReviewerId();
-        Date reviewTime = app.getReviewTime();
-        Long userId = app.getUserId();
-        Date createTime = app.getCreateTime();
-        Date updateTime = app.getUpdateTime();
-        Integer isDelete = app.getIsDelete();
 
         // 创建数据时，参数不能为空
         if (add) {
             // 补充校验规则
             ThrowUtils.throwIf(StringUtils.isBlank(appName), ErrorCode.PARAMS_ERROR,"应用名称不能为空");
             ThrowUtils.throwIf(StringUtils.isBlank(appDesc), ErrorCode.PARAMS_ERROR,"应用描述不能为空");
-            ReviewStatusEnum reviewStatusEnum = ReviewStatusEnum.getEnumByValue(reviewStatus);
-            ThrowUtils.throwIf(reviewStatusEnum == null, ErrorCode.PARAMS_ERROR,"审核状态非法");
             AppTypeEnum appTypeEnum = AppTypeEnum.getEnumByValue(appType);
             ThrowUtils.throwIf(appTypeEnum == null,ErrorCode.PARAMS_ERROR,"应用类型非法");
             AppScoringStrategyEnum appScoringStrategyEnum = AppScoringStrategyEnum.getEnumByValue(scoringStrategy);
@@ -86,6 +75,10 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         // 补充校验规则
         if (StringUtils.isNotBlank(appName)) {
             ThrowUtils.throwIf(appName.length() > 80, ErrorCode.PARAMS_ERROR, "应用名称过长");
+        }
+        if(reviewStatus !=null){
+            ReviewStatusEnum reviewStatusEnum = ReviewStatusEnum.getEnumByValue(reviewStatus);
+            ThrowUtils.throwIf(reviewStatusEnum == null, ErrorCode.PARAMS_ERROR,"审核状态非法");
         }
     }
 

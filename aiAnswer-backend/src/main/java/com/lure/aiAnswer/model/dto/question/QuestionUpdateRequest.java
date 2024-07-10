@@ -20,7 +20,7 @@ public class QuestionUpdateRequest implements Serializable {
     /**
      * 题目内容（json格式）
      */
-    private List<QuestionContentDTO> questionContent;
+    private QuestionContentDTO questionContent;
 
 
     private static final long serialVersionUID = 1L;

@@ -1,8 +1,6 @@
 package com.lure.aiAnswer.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lure.aiAnswer.model.vo.LoginUserVO;
-import com.lure.aiAnswer.model.vo.UserVO;
 import com.lure.aiAnswer.annotation.AuthCheck;
 import com.lure.aiAnswer.common.BaseResponse;
 import com.lure.aiAnswer.common.DeleteRequest;
@@ -11,30 +9,20 @@ import com.lure.aiAnswer.common.ResultUtils;
 import com.lure.aiAnswer.constant.UserConstant;
 import com.lure.aiAnswer.exception.BusinessException;
 import com.lure.aiAnswer.exception.ThrowUtils;
-import com.lure.aiAnswer.model.dto.user.UserAddRequest;
-import com.lure.aiAnswer.model.dto.user.UserLoginRequest;
-import com.lure.aiAnswer.model.dto.user.UserQueryRequest;
-import com.lure.aiAnswer.model.dto.user.UserRegisterRequest;
-import com.lure.aiAnswer.model.dto.user.UserUpdateMyRequest;
-import com.lure.aiAnswer.model.dto.user.UserUpdateRequest;
+import com.lure.aiAnswer.model.dto.user.*;
 import com.lure.aiAnswer.model.entity.User;
+import com.lure.aiAnswer.model.vo.LoginUserVO;
+import com.lure.aiAnswer.model.vo.UserVO;
 import com.lure.aiAnswer.service.UserService;
-
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import static com.lure.aiAnswer.service.impl.UserServiceImpl.SALT;
 

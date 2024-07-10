@@ -1,7 +1,6 @@
 package com.lure.aiAnswer.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lure.aiAnswer.model.vo.PostVO;
 import com.lure.aiAnswer.common.BaseResponse;
 import com.lure.aiAnswer.common.ErrorCode;
 import com.lure.aiAnswer.common.ResultUtils;
@@ -12,16 +11,18 @@ import com.lure.aiAnswer.model.dto.postfavour.PostFavourAddRequest;
 import com.lure.aiAnswer.model.dto.postfavour.PostFavourQueryRequest;
 import com.lure.aiAnswer.model.entity.Post;
 import com.lure.aiAnswer.model.entity.User;
+import com.lure.aiAnswer.model.vo.PostVO;
 import com.lure.aiAnswer.service.PostFavourService;
 import com.lure.aiAnswer.service.PostService;
 import com.lure.aiAnswer.service.UserService;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 帖子收藏接口

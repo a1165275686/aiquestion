@@ -1,4 +1,4 @@
-package com.lure.aiAnswer.model.dto.useranswer;
+package com.lure.aiAnswer.model.dto.userAnswer;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
 package com.lure.aiAnswer.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lure.aiAnswer.annotation.AuthCheck;
 import com.lure.aiAnswer.common.BaseResponse;
@@ -13,17 +14,17 @@ import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerAddRequest;
 import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerEditRequest;
 import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerQueryRequest;
 import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerUpdateRequest;
-import com.lure.aiAnswer.model.entity.UserAnswer;
 import com.lure.aiAnswer.model.entity.User;
+import com.lure.aiAnswer.model.entity.UserAnswer;
 import com.lure.aiAnswer.model.vo.UserAnswerVO;
 import com.lure.aiAnswer.service.UserAnswerService;
 import com.lure.aiAnswer.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户答案接口
@@ -52,14 +53,18 @@ public class UserAnswerController {
     @PostMapping("/add")
     public BaseResponse<Long> addUserAnswer(@RequestBody UserAnswerAddRequest userAnswerAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(userAnswerAddRequest == null, ErrorCode.PARAMS_ERROR);
-        // todo 在此处将实体类和 DTO 进行转换
+        // 在此处将实体类和 DTO 进行转换
         UserAnswer userAnswer = new UserAnswer();
         BeanUtils.copyProperties(userAnswerAddRequest, userAnswer);
+        List<String> choices = userAnswerAddRequest.getChoices();
+        userAnswer.setChoices(JSONUtil.toJsonStr(choices));
+
         // 数据校验
         userAnswerService.validUserAnswer(userAnswer, true);
-        // todo 填充默认值
+        // 填充默认值
         User loginUser = userService.getLoginUser(request);
         userAnswer.setUserId(loginUser.getId());
+
         // 写入数据库
         boolean result = userAnswerService.save(userAnswer);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
@@ -107,9 +112,12 @@ public class UserAnswerController {
         if (userAnswerUpdateRequest == null || userAnswerUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 在此处将实体类和 DTO 进行转换
         UserAnswer userAnswer = new UserAnswer();
         BeanUtils.copyProperties(userAnswerUpdateRequest, userAnswer);
+        List<String> choices = userAnswerUpdateRequest.getChoices();
+        userAnswer.setChoices(JSONUtil.toJsonStr(choices));
+
         // 数据校验
         userAnswerService.validUserAnswer(userAnswer, false);
         // 判断是否存在
