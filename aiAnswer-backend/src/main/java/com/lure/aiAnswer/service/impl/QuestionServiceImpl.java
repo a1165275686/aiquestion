@@ -8,6 +8,7 @@ import com.lure.aiAnswer.common.ErrorCode;
 import com.lure.aiAnswer.constant.CommonConstant;
 import com.lure.aiAnswer.exception.ThrowUtils;
 import com.lure.aiAnswer.mapper.QuestionMapper;
+import com.lure.aiAnswer.model.dto.question.QuestionContentDTO;
 import com.lure.aiAnswer.model.dto.question.QuestionQueryRequest;
 import com.lure.aiAnswer.model.entity.App;
 import com.lure.aiAnswer.model.entity.Question;
@@ -84,7 +85,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         // 从对象中取值
 
         Long id = questionQueryRequest.getId();
-        String questionContent = questionQueryRequest.getQuestionContent();
+        List<QuestionContentDTO> questionContent = questionQueryRequest.getQuestionContent();
         Long appId = questionQueryRequest.getAppId();
         Long userId = questionQueryRequest.getUserId();
         Long notId = questionQueryRequest.getNotId();
@@ -93,7 +94,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
         // 补充需要的查询条件
         // 模糊查询
-        queryWrapper.like(StringUtils.isNotBlank(questionContent), "title", questionContent);
+        //queryWrapper.like(StringUtils.isNotBlank(questionContent), "title", questionContent);
         // 精确查询
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
