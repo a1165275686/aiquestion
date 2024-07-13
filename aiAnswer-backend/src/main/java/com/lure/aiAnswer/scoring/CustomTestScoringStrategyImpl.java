@@ -21,6 +21,7 @@ import java.util.Map;
  * 自定义测评类应用评分策略
  */
 
+@ScoringStrategyConfig(appType = 0, scoringStrategy = 0)
 public class CustomTestScoringStrategyImpl implements ScoringStrategy {
     @Resource
     private QuestionService questionService;

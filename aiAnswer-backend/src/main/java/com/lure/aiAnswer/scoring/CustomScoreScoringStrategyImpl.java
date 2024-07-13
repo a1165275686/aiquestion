@@ -20,7 +20,7 @@ import java.util.Optional;
  *
  * 自定义得分类应用评分策略
  */
-
+@ScoringStrategyConfig(appType = 1, scoringStrategy = 0)
 public class CustomScoreScoringStrategyImpl implements ScoringStrategy {
 
     @Resource
