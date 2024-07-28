@@ -76,3 +76,5 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.lure.aiAnswer.controller
+ai:
+  apiKey: 8b50df17061c5adab502626f2ed6a9db.jMUfP1iwA8KfzbpO
