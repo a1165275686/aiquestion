@@ -8,7 +8,6 @@ import com.lure.aiAnswer.common.ErrorCode;
 import com.lure.aiAnswer.constant.CommonConstant;
 import com.lure.aiAnswer.exception.ThrowUtils;
 import com.lure.aiAnswer.mapper.QuestionMapper;
-import com.lure.aiAnswer.model.dto.question.QuestionContentDTO;
 import com.lure.aiAnswer.model.dto.question.QuestionQueryRequest;
 import com.lure.aiAnswer.model.entity.App;
 import com.lure.aiAnswer.model.entity.Question;
@@ -29,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -85,7 +85,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         // 从对象中取值
 
         Long id = questionQueryRequest.getId();
-        List<QuestionContentDTO> questionContent = questionQueryRequest.getQuestionContent();
+        String questionContent = questionQueryRequest.getQuestionContent();
         Long appId = questionQueryRequest.getAppId();
         Long userId = questionQueryRequest.getUserId();
         Long notId = questionQueryRequest.getNotId();
@@ -94,7 +94,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
         // 补充需要的查询条件
         // 模糊查询
-        //queryWrapper.like(StringUtils.isNotBlank(questionContent), "title", questionContent);
+        queryWrapper.like(StringUtils.isNotBlank(questionContent), "questionContent", questionContent);
         // 精确查询
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
@@ -118,8 +118,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public QuestionVO getQuestionVO(Question question, HttpServletRequest request) {
         // 对象转封装类
         QuestionVO questionVO = QuestionVO.objToVo(question);
-
-        // 可以根据需要为封装对象补充值，不需要的内容可以删除
+        //返回流水号
+        questionVO.setSerialNumber(UUID.randomUUID().toString());
         // region 可选
         // 1. 关联查询用户信息
         Long userId = question.getUserId();

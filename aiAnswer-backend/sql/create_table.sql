@@ -137,3 +137,7 @@ create table if not exists user_answer_1
     index idx_appId (appId),
     index idx_userId (userId)
 ) comment '用户答题记录' collate = utf8mb4_unicode_ci;
+
+
+
+

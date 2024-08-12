@@ -1,6 +1,8 @@
 package com.lure.aiAnswer.controller;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lure.aiAnswer.annotation.AuthCheck;
 import com.lure.aiAnswer.common.BaseResponse;
@@ -14,14 +16,20 @@ import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerAddRequest;
 import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerEditRequest;
 import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerQueryRequest;
 import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerUpdateRequest;
+import com.lure.aiAnswer.model.entity.App;
 import com.lure.aiAnswer.model.entity.User;
 import com.lure.aiAnswer.model.entity.UserAnswer;
+import com.lure.aiAnswer.model.enums.ReviewStatusEnum;
 import com.lure.aiAnswer.model.vo.UserAnswerVO;
+import com.lure.aiAnswer.scoring.ScoringStrategyExecutor;
+import com.lure.aiAnswer.service.AppService;
 import com.lure.aiAnswer.service.UserAnswerService;
 import com.lure.aiAnswer.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,8 +47,13 @@ public class UserAnswerController {
     private UserAnswerService userAnswerService;
 
     @Resource
+    private AppService appService;
+
+    @Resource
     private UserService userService;
 
+    @Resource
+    private ScoringStrategyExecutor scoringStrategyExecutor;
     // region 增删改查
 
     /**
@@ -58,20 +71,49 @@ public class UserAnswerController {
         BeanUtils.copyProperties(userAnswerAddRequest, userAnswer);
         List<String> choices = userAnswerAddRequest.getChoices();
         userAnswer.setChoices(JSONUtil.toJsonStr(choices));
-
         // 数据校验
         userAnswerService.validUserAnswer(userAnswer, true);
+        // 判断 app 是否存在
+        Long appId = userAnswerAddRequest.getAppId();
+        App app = appService.getById(appId);
+        ThrowUtils.throwIf(app == null, ErrorCode.NOT_FOUND_ERROR);
+        if (!ReviewStatusEnum.PASS.equals(ReviewStatusEnum.getEnumByValue(app.getReviewStatus()))) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "应用未通过审核，无法答题");
+        }
         // 填充默认值
         User loginUser = userService.getLoginUser(request);
         userAnswer.setUserId(loginUser.getId());
 
+        long newUserAnswerId;
+
         // 写入数据库
-        boolean result = userAnswerService.save(userAnswer);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-        // 返回新写入的数据 id
-        long newUserAnswerId = userAnswer.getId();
+        try {
+            boolean result = userAnswerService.save(userAnswer);
+            ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+            // 返回新写入的数据 id
+            newUserAnswerId = userAnswer.getId();
+        } catch (DuplicateKeyException e) {
+            //ignore error 获取之前数据 id
+            UserAnswer answer = userAnswerService.getOne(Wrappers.lambdaQuery(UserAnswer.class)
+                    .select(UserAnswer::getId)
+                    .eq(UserAnswer::getSerialNumber, userAnswer.getSerialNumber())
+                    .eq(UserAnswer::getAppId, userAnswer.getAppId())
+                    .eq(UserAnswer::getUserId, userAnswer.getUserId()));
+            newUserAnswerId = answer.getId();
+        }
+
+        // 调用评分模块
+        try {
+            UserAnswer userAnswerWithResult = scoringStrategyExecutor.doScore(choices, app);
+            userAnswerWithResult.setId(newUserAnswerId);
+            userAnswerService.updateById(userAnswerWithResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "评分错误");
+        }
         return ResultUtils.success(newUserAnswerId);
     }
+
 
     /**
      * 删除用户答案
@@ -221,7 +263,6 @@ public class UserAnswerController {
         if (userAnswerEditRequest == null || userAnswerEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
         UserAnswer userAnswer = new UserAnswer();
         BeanUtils.copyProperties(userAnswerEditRequest, userAnswer);
         // 数据校验
@@ -241,5 +282,9 @@ public class UserAnswerController {
         return ResultUtils.success(true);
     }
 
+    @GetMapping("/generate/id")
+    public BaseResponse<Long> generateUserAnswerId() {
+        return ResultUtils.success(IdUtil.getSnowflakeNextId());
+    }
     // endregion
 }

@@ -1,10 +1,10 @@
 package com.lure.aiAnswer.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户答题记录
@@ -78,6 +78,13 @@ public class UserAnswer implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+
+
+    /**
+     * 流水号
+     */
+    private String serialNumber;
+
 
     /**
      * 是否删除

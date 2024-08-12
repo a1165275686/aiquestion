@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 查询题目请求
@@ -23,7 +22,7 @@ public class QuestionQueryRequest extends PageRequest implements Serializable {
     /**
      * 题目内容（json格式）
      */
-    private List<QuestionContentDTO> questionContent;
+    private String questionContent;
 
     /**
      * 应用 id

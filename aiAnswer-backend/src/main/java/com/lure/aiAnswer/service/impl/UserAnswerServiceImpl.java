@@ -1,6 +1,7 @@
 package com.lure.aiAnswer.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -52,22 +53,18 @@ public class UserAnswerServiceImpl extends ServiceImpl<UserAnswerMapper, UserAns
         ThrowUtils.throwIf(userAnswer == null, ErrorCode.PARAMS_ERROR);
         // 从对象中取值
         Long appId = userAnswer.getAppId();
-        String choices = userAnswer.getChoices();
-
-
+        String serialNumber = userAnswer.getSerialNumber();
         // 创建数据时，参数不能为空
         if (add) {
-            // todo 补充校验规则
-            ThrowUtils.throwIf(appId ==null||appId<=0, ErrorCode.PARAMS_ERROR,"appID非法");
-
-            ThrowUtils.throwIf(StringUtils.isBlank(choices), ErrorCode.PARAMS_ERROR,"选择为空");
+            // 补充校验规则
+            ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "appId 非法");
+            ThrowUtils.throwIf(StrUtil.isBlank(serialNumber), ErrorCode.PARAMS_ERROR, " 流水号不存在");
         }
-
         // 修改数据时，有参数则校验
         // 补充校验规则
-        if(appId !=null){
-            App app =  appService.getById(appId);
-            ThrowUtils.throwIf(app ==null,ErrorCode.PARAMS_ERROR,"应用不存在");
+        if (appId != null) {
+            App app = appService.getById(appId);
+            ThrowUtils.throwIf(app == null, ErrorCode.PARAMS_ERROR, "应用不存在");
         }
 
     }
@@ -84,7 +81,6 @@ public class UserAnswerServiceImpl extends ServiceImpl<UserAnswerMapper, UserAns
         if (userAnswerQueryRequest == null) {
             return queryWrapper;
         }
-        // todo 从对象中取值
 
         Long id = userAnswerQueryRequest.getId();
         Long appId = userAnswerQueryRequest.getAppId();
@@ -143,8 +139,6 @@ public class UserAnswerServiceImpl extends ServiceImpl<UserAnswerMapper, UserAns
     public UserAnswerVO getUserAnswerVO(UserAnswer userAnswer, HttpServletRequest request) {
         // 对象转封装类
         UserAnswerVO userAnswerVO = UserAnswerVO.objToVo(userAnswer);
-
-        // 可以根据需要为封装对象补充值，不需要的内容可以删除
         // region 可选
         // 1. 关联查询用户信息
         Long userId = userAnswer.getUserId();
@@ -178,8 +172,7 @@ public class UserAnswerServiceImpl extends ServiceImpl<UserAnswerMapper, UserAns
             return UserAnswerVO.objToVo(userAnswer);
         }).collect(Collectors.toList());
 
-        // 可以根据需要为封装对象补充值，不需要的内容可以删除
-        // region 可选
+        // region
         // 1. 关联查询用户信息
         Set<Long> userIdSet = userAnswerList.stream().map(UserAnswer::getUserId).collect(Collectors.toSet());
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
