@@ -14,7 +14,9 @@ export const useLoginUserStore = defineStore("loginUser", () => {
   function setLoginUser(newLoginUser: API.LoginUserVO) {
     loginUser.value = newLoginUser;
   }
-
+  function clearLoginUser() {
+    loginUser.value = {};
+  }
   async function fetchLoginUser() {
     const res = await getLoginUserUsingGet();
     if (res.data.code === 0 && res.data.data) {
@@ -24,5 +26,5 @@ export const useLoginUserStore = defineStore("loginUser", () => {
     }
   }
 
-  return { loginUser, setLoginUser, fetchLoginUser };
+  return { loginUser, setLoginUser, clearLoginUser, fetchLoginUser };
 });

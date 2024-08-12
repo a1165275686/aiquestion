@@ -26,10 +26,10 @@ public class UserAnswerAddRequest implements Serializable {
      */
     private List<String> choices;
 
-    /**
-     * 流水号
-     */
-    private String serialNumber;
+//    /**
+//     * 流水号
+//     */
+//    private String serialNumber;
 
 
     private static final long serialVersionUID = 1L;

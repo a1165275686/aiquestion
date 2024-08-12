@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -119,7 +118,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         // 对象转封装类
         QuestionVO questionVO = QuestionVO.objToVo(question);
         //返回流水号
-        questionVO.setSerialNumber(UUID.randomUUID().toString());
+        //questionVO.setSerialNumber(UUID.randomUUID().toString());
         // region 可选
         // 1. 关联查询用户信息
         Long userId = question.getUserId();

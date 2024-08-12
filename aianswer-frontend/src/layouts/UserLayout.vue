@@ -4,17 +4,17 @@
       <a-layout-header class="header">
         <a-space>
           <img class="logo" src="../assets/logo.png" />
-          <div>鱼答答 AI 答题应用平台</div>
+          <div>乐趣 AI 答题测评</div>
         </a-space>
       </a-layout-header>
       <a-layout-content class="content">
         <router-view />
       </a-layout-content>
-      <a-layout-footer class="footer">
-        <a href="https://www.code-nav.cn" target="_blank">
-          编程导航 by 程序员鱼皮
-        </a>
-      </a-layout-footer>
+<!--      <a-layout-footer class="footer">-->
+<!--        <a href="https://www.code-nav.cn" target="_blank">-->
+<!--          编程导航 by 程序员鱼皮-->
+<!--        </a>-->
+<!--      </a-layout-footer>-->
     </a-layout>
   </div>
 </template>

@@ -1,8 +1,9 @@
 package com.lure.aiAnswer.model.vo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 已登录用户视图（脱敏）
@@ -15,6 +16,9 @@ public class LoginUserVO implements Serializable {
      * 用户 id
      */
     private Long id;
+
+
+    //private String token;
 
     /**
      * 用户昵称

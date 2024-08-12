@@ -1,7 +1,6 @@
 package com.lure.aiAnswer.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,8 +10,8 @@ import com.lure.aiAnswer.exception.ThrowUtils;
 import com.lure.aiAnswer.mapper.UserAnswerMapper;
 import com.lure.aiAnswer.model.dto.userAnswer.UserAnswerQueryRequest;
 import com.lure.aiAnswer.model.entity.App;
-import com.lure.aiAnswer.model.entity.UserAnswer;
 import com.lure.aiAnswer.model.entity.User;
+import com.lure.aiAnswer.model.entity.UserAnswer;
 import com.lure.aiAnswer.model.vo.UserAnswerVO;
 import com.lure.aiAnswer.model.vo.UserVO;
 import com.lure.aiAnswer.service.AppService;
@@ -26,7 +25,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -53,12 +54,12 @@ public class UserAnswerServiceImpl extends ServiceImpl<UserAnswerMapper, UserAns
         ThrowUtils.throwIf(userAnswer == null, ErrorCode.PARAMS_ERROR);
         // 从对象中取值
         Long appId = userAnswer.getAppId();
-        String serialNumber = userAnswer.getSerialNumber();
+        Long id = userAnswer.getId();
         // 创建数据时，参数不能为空
         if (add) {
             // 补充校验规则
             ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "appId 非法");
-            ThrowUtils.throwIf(StrUtil.isBlank(serialNumber), ErrorCode.PARAMS_ERROR, " 流水号不存在");
+            ThrowUtils.throwIf(id == null || id <= 0, ErrorCode.PARAMS_ERROR, "id 非法");
         }
         // 修改数据时，有参数则校验
         // 补充校验规则

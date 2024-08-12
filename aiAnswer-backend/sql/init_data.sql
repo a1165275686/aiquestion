@@ -129,6 +129,19 @@ INSERT INTO user_answer (id, appId, appType, choices, resultId, resultName, resu
 VALUES (2, 2, 0, '["D","C","B","D","A","C","C","B","C","A"]', 17, '首都知识大师', '你真棒棒哦，首都知识非常出色！', null, 10, 0, 1,
         '2024-05-09 15:08:36', '2024-05-09 15:10:13', 0);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 use lureanswer;
 alter table user_answer_0
     add serialNumber varchar(64) null comment '用户答题流水号' after userId;

@@ -2,7 +2,6 @@ package com.lure.aiAnswer.controller;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lure.aiAnswer.annotation.AuthCheck;
 import com.lure.aiAnswer.common.BaseResponse;
@@ -83,29 +82,20 @@ public class UserAnswerController {
         // 填充默认值
         User loginUser = userService.getLoginUser(request);
         userAnswer.setUserId(loginUser.getId());
-
-        long newUserAnswerId;
-
         // 写入数据库
         try {
             boolean result = userAnswerService.save(userAnswer);
             ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-            // 返回新写入的数据 id
-            newUserAnswerId = userAnswer.getId();
         } catch (DuplicateKeyException e) {
-            //ignore error 获取之前数据 id
-            UserAnswer answer = userAnswerService.getOne(Wrappers.lambdaQuery(UserAnswer.class)
-                    .select(UserAnswer::getId)
-                    .eq(UserAnswer::getSerialNumber, userAnswer.getSerialNumber())
-                    .eq(UserAnswer::getAppId, userAnswer.getAppId())
-                    .eq(UserAnswer::getUserId, userAnswer.getUserId()));
-            newUserAnswerId = answer.getId();
+            // ignore error
         }
-
+        // 返回新写入的数据 id
+        long newUserAnswerId = userAnswer.getId();
         // 调用评分模块
         try {
             UserAnswer userAnswerWithResult = scoringStrategyExecutor.doScore(choices, app);
             userAnswerWithResult.setId(newUserAnswerId);
+            userAnswerWithResult.setAppId(null);
             userAnswerService.updateById(userAnswerWithResult);
         } catch (Exception e) {
             e.printStackTrace();

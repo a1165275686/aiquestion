@@ -80,10 +80,6 @@ public class UserAnswer implements Serializable {
     private Date updateTime;
 
 
-    /**
-     * 流水号
-     */
-    private String serialNumber;
 
 
     /**

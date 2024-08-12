@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
  * AI测评类应用评分策略
  */
 
@@ -84,7 +83,7 @@ public class AiTestScoringStrategyImpl implements ScoringStrategy {
         RLock lock = redissonClient.getLock(AI_ANSWER_LOCK + cacheKey);
         try {
             // 竞争锁
-            boolean res = lock.tryLock(3,15,TimeUnit.SECONDS);
+            boolean res = lock.tryLock(3, 15, TimeUnit.SECONDS);
             // 没抢到锁，强行返回
             if (!res) {
                 return null;
@@ -145,6 +144,7 @@ public class AiTestScoringStrategyImpl implements ScoringStrategy {
         userMessage.append(JSONUtil.toJsonStr(questionAnswerDTOList));
         return userMessage.toString();
     }
+
     /**
      * 构建缓存 key
      *

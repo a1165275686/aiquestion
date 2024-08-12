@@ -347,7 +347,7 @@ public class QuestionController {
         User loginUser = userService.getLoginUser(request);
         // 默认全局线程池
         Scheduler scheduler = Schedulers.single();
-        if (isVip) {
+        if (true) {
             scheduler = vipScheduler;
         }
         modelDataFlowable

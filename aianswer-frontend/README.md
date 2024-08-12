@@ -1,4 +1,4 @@
-# yudada-frontend
+# aianswer-frontend
 
 ## Project setup
 ```
