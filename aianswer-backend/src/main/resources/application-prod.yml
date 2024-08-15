@@ -66,9 +66,4 @@ mybatis-plus:
     # 生产环境关闭日志
     log-impl: ''
 # 接口文档配置
-knife4j:
-  basic:
-    enable: true
-    username: root
-    password: 123456
-apiKey: 8b50df17061c5adab502626f2ed6a9db.jMUfP1iwA8KfzbpO
+
